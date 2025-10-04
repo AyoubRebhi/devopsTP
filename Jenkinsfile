@@ -1,8 +1,8 @@
 pipeline {
     agent any
 
-    tools {
-        sonarQube 'SonarQubeLocal'
+    environment {
+        // Optional: define other env vars here
     }
 
     stages {
@@ -14,7 +14,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh './build.sh' // or your build command
+                sh './build.sh' // or your actual build command
             }
         }
 
