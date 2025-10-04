@@ -16,7 +16,23 @@ pipeline {
                     sh 'mvn clean package -DskipTests'                }
             }
         }
+         stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQubeLocal') { // Match the name you configured in Jenkins
+                    dir('TP-Projet') {
+                        sh 'sonar-scanner'
+                    }
+                }
+            }
+        }
 
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
         stage('Verify') {
             steps {
                 echo '✅ everything is good'
