@@ -12,7 +12,9 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+                dir('TP-Projet') { // Adjust this to match your actual folder
+                    sh 'mvn clean install'
+                }
             }
         }
 
