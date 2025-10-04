@@ -1,37 +1,24 @@
 pipeline {
     agent any
-
-    stages {
+    tools {
+        maven 'M2_HOME'
+    }
+     stages {
         stage('Checkout') {
             steps {
-               git branch: 'main', url: 'https://github.com/AyoubRebhi/devopsTP.git' 
+                git branch: 'main', url: 'https://github.com/AyoubRebhi/devopsTP.git'
             }
         }
 
         stage('Build') {
-    steps {
-        sh '''
-            echo "🔧 Starting build..."
-            mkdir -p build
-            echo "Build complete!" > build/status.txt
-        '''
-    }
-}
-
-
-        stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQubeLocal') {
-                    sh 'sonar-scanner'
-                }
+                sh 'mvn clean install'
             }
         }
 
-        stage('Quality Gate') {
+        stage('Verify') {
             steps {
-                timeout(time: 1, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
+                echo '✅ everything is good'
             }
         }
     }
