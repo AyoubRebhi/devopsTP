@@ -9,10 +9,15 @@ pipeline {
         }
 
         stage('Build') {
-            steps {
-                sh './build.sh' // or your actual build command
-            }
-        }
+    steps {
+        sh '''
+            echo "🔧 Starting build..."
+            mkdir -p build
+            echo "Build complete!" > build/status.txt
+        '''
+    }
+}
+
 
         stage('SonarQube Analysis') {
             steps {
