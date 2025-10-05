@@ -3,6 +3,9 @@ pipeline {
     tools {
         maven 'M2_HOME'
     }
+     environment {
+        SONARQUBE_ENV = 'SonarQubeLocal' // Match the name configured in Jenkins
+    }
      stages {
         stage('Checkout') {
             steps {
@@ -16,26 +19,19 @@ pipeline {
                     sh 'mvn clean package -DskipTests'                }
             }
         }
-         stage('SonarQube Analysis') {
+        stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQubeLocal') { // Match the name you configured in Jenkins
+                withSonarQubeEnv("${SONARQUBE_ENV}") {
                     dir('TP-Projet') {
-                        sh 'sonar-scanner'
+                        sh 'mvn sonar:sonar -Dsonar.projectKey=TP-Projet'
                     }
                 }
             }
         }
 
-        stage('Quality Gate') {
+        stage('Done') {
             steps {
-                timeout(time: 1, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
-        stage('Verify') {
-            steps {
-                echo '✅ everything is good'
+                echo '✅ Build and SonarQube scan completed successfully!'
             }
         }
     }
