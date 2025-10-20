@@ -34,5 +34,14 @@ pipeline {
                 echo '✅ Build and SonarQube scan completed successfully!'
             }
         }
+        
+         stage('Docker Build') {
+            steps {
+                dir('TP-Projet') {
+                    sh 'docker build -t youbi2012m/tp-projet:latest .'
+        }
+    }
+}
+
     }
 }
